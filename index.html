@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Tục ngữ & Thành ngữ</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .question { margin: 10px 0; }
+        .btn { padding: 5px 10px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Trắc nghiệm phân biệt Tục ngữ & Thành ngữ</h2>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()" class="btn">Nộp bài</button>
+    <p id="result"></p>
+    <button onclick="location.reload()" class="btn">Làm lại</button>
+
+    <script>
+        const allQuestions = [
+            { text: "Có công mài sắt, có ngày nên kim", type: "Tục ngữ" },
+            { text: "Chạy như ma đuổi", type: "Thành ngữ" },
+            { text: "Một cây làm chẳng nên non, ba cây chụm lại nên hòn núi cao", type: "Tục ngữ" },
+            { text: "Nhanh như chớp", type: "Thành ngữ" },
+            { text: "Đói cho sạch, rách cho thơm", type: "Tục ngữ" },
+            { text: "Chậm như rùa", type: "Thành ngữ" },
+            { text: "Lửa thử vàng, gian nan thử sức", type: "Tục ngữ" },
+            { text: "Mèo mù vớ cá rán", type: "Thành ngữ" },
+            { text: "Nước đến chân mới nhảy", type: "Tục ngữ" },
+            { text: "Thùng rỗng kêu to", type: "Thành ngữ" },
+            { text: "Qua cầu rút ván", type: "Thành ngữ" },
+            { text: "Kiến tha lâu cũng đầy tổ", type: "Tục ngữ" },
+            { text: "Cầm đèn chạy trước ô tô", type: "Thành ngữ" },
+            { text: "Lên thác xuống ghềnh", type: "Thành ngữ" },
+            { text: "Ăn quả nhớ kẻ trồng cây", type: "Tục ngữ" },
+            { text: "Lời nói gió bay", type: "Thành ngữ" },
+            { text: "Gần mực thì đen, gần đèn thì sáng", type: "Tục ngữ" },
+            { text: "Tay làm hàm nhai, tay quai miệng trễ", type: "Tục ngữ" },
+            { text: "Được voi đòi tiên", type: "Thành ngữ" },
+            { text: "Qua sông bắc cầu", type: "Tục ngữ" }
+        ];
+
+        function getRandomQuestions() {
+            const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 10);
+        }
+
+        const questions = getRandomQuestions();
+
+        let quizHTML = "";
+        questions.forEach((q, index) => {
+            quizHTML += `
+                <div class="question">
+                    <p>${index + 1}. ${q.text}</p>
+                    <label><input type="radio" name="q${index}" value="Tục ngữ"> Tục ngữ</label>
+                    <label><input type="radio" name="q${index}" value="Thành ngữ"> Thành ngữ</label>
+                </div>
+            `;
+        });
+        document.getElementById("quiz").innerHTML = quizHTML;
+
+        function submitQuiz() {
+            let score = 0;
+            questions.forEach((q, index) => {
+                const answer = document.querySelector(`input[name="q${index}"]:checked`);
+                if (answer && answer.value === q.type) {
+                    score++;
+                }
+            });
+            document.getElementById("result").innerText = `Điểm của bạn: ${score}/10`;
+        }
+    </script>
+
+</body>
+</html>
