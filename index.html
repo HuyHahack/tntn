@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Tục ngữ & Thành ngữ</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .question { margin-bottom: 15px; font-size: 18px; }
+        .timer { font-size: 20px; font-weight: bold; color: red; }
+        .hidden { display: none; }
+        .result { font-size: 22px; font-weight: bold; margin-top: 20px; }
+        .wrong { color: red; }
+    </style>
+</head>
+<body>
+
+    <h2>Trắc nghiệm: Phân biệt Tục ngữ và Thành ngữ</h2>
+    <p class="timer">Thời gian còn lại: <span id="time">300</span> giây</p>
+    
+    <div class="container" id="quiz"></div>
+    
+    <button onclick="submitQuiz()">Nộp bài</button>
+    <button onclick="location.reload()">Làm lại</button>
+    
+    <p id="result" class="result hidden"></p>
+
+    <script>
+        // Ngân hàng câu hỏi (100 câu)
+        const questions = [
+            { text: "Có công mài sắt, có ngày nên kim", type: "Tục ngữ" },
+            { text: "Lá lành đùm lá rách", type: "Tục ngữ" },
+            { text: "Chạy như ma đuổi", type: "Thành ngữ" },
+            { text: "Gần mực thì đen, gần đèn thì sáng", type: "Tục ngữ" },
+            { text: "Ăn quả nhớ kẻ trồng cây", type: "Tục ngữ" },
+            { text: "Môi hở răng lạnh", type: "Thành ngữ" },
+            { text: "Lời nói gió bay", type: "Thành ngữ" },
+            { text: "Đói cho sạch, rách cho thơm", type: "Tục ngữ" },
+            { text: "Học ăn, học nói, học gói, học mở", type: "Tục ngữ" },
+            { text: "Một giọt máu đào hơn ao nước lã", type: "Tục ngữ" },
+            { text: "Rút dây động rừng", type: "Thành ngữ" },
+            { text: "Trèo cao ngã đau", type: "Thành ngữ" },
+            { text: "Có mới nới cũ", type: "Thành ngữ" },
+            { text: "Thất bại là mẹ thành công", type: "Tục ngữ" },
+            { text: "Gió chiều nào che chiều ấy", type: "Thành ngữ" },
+            { text: "Tiền mất tật mang", type: "Thành ngữ" },
+            { text: "Uống nước nhớ nguồn", type: "Tục ngữ" },
+            { text: "Ngưu tầm ngưu, mã tầm mã", type: "Tục ngữ" },
+            { text: "Thẳng ruột ngựa", type: "Thành ngữ" },
+            { text: "Chó cắn áo rách", type: "Tục ngữ" }
+        ];
+
+        // Chọn ngẫu nhiên 10 câu từ danh sách 100 câu
+        function getRandomQuestions() {
+            let shuffled = questions.sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 10);
+        }
+
+        let selectedQuestions = getRandomQuestions();
+        let quizContainer = document.getElementById("quiz");
+
+        // Hiển thị câu hỏi
+        selectedQuestions.forEach((q, index) => {
+            let questionDiv = document.createElement("div");
+            questionDiv.classList.add("question");
+            questionDiv.innerHTML = `
+                <p><strong>Câu ${index + 1}:</strong> ${q.text}</p>
+                <label><input type="radio" name="q${index}" value="Tục ngữ"> Tục ngữ</label>
+                <label><input type="radio" name="q${index}" value="Thành ngữ"> Thành ngữ</label>
+            `;
+            quizContainer.appendChild(questionDiv);
+        });
+
+        // Đếm ngược thời gian
+        let timeLeft = 300;
+        let timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("time").innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                submitQuiz();
+            }
+        }, 1000);
+
+        // Nộp bài và tính điểm
+        function submitQuiz() {
+            clearInterval(timer);
+            let score = 0;
+            let incorrect = [];
+
+            selectedQuestions.forEach((q, index) => {
+                let selectedAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selectedAnswer) {
+                    if (selectedAnswer.value === q.type) {
+                        score++;
+                    } else {
+                        incorrect.push(index);
+                    }
+                } else {
+                    incorrect.push(index);
+                }
+            });
+
+            let resultText = `Bạn được ${score}/10 điểm.`;
+            if (incorrect.length > 0) {
+                resultText += ` Bạn sai ${incorrect.length} câu, có thể sửa lại.`;
+                incorrect.forEach(i => {
+                    let questionDiv = document.querySelectorAll(".question")[i];
+                    questionDiv.classList.add("wrong");
+                });
+            }
+
+            document.getElementById("result").innerText = resultText;
+            document.getElementById("result").classList.remove("hidden");
+        }
+    </script>
+
+</body>
+</html>
